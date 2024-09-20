@@ -1,8 +1,8 @@
 import { useState } from "react";
 import "./App.css";
 import ActionButtons from "./components/ActionButtons";
-import CharacterSheet from "./components/character/CharacterSheet";
-import SkillCheckResults from "./components/SkillCheckResults";
+import CharacterSheet from "./components/Character/CharacterSheet";
+import SkillCheckResults from "./components/SkillCheckResults/SkillCheckResults";
 import { ATTRIBUTE_LIST, CLASS_LIST, SKILL_LIST } from "./consts.js";
 
 function App() {

@@ -1,6 +1,6 @@
 function Classes() {
   return (
-    <div>
+    <div className="container character-info__classes">
       <h3>Classes</h3>
     </div>
   );

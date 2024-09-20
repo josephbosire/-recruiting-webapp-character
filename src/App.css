@@ -36,6 +36,32 @@
   color: #61dafb;
 }
 
+.container {
+  border: 1px solid white;
+  border-radius: 5px;
+  margin: 15px;
+  padding: 10px;
+}
+
+.character-info {
+  display: flex;
+  flex-direction: row;
+}
+
+.character-info__attributes {
+  flex: 1 1 30%;
+}
+.character-info__classes {
+  flex: 1 1 20%;
+}
+.character-info__skills {
+  flex: 1 1 30%;
+}
+
+p {
+  margin: 0;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

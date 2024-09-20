@@ -2,7 +2,7 @@ import React from "react";
 
 function SkillCheck() {
   return (
-    <form>
+    <form className="container">
       <h3>Skill Check</h3>
       <label>Skill:</label>
       <select id="skill">

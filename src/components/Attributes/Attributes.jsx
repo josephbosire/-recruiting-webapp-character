@@ -1,6 +1,6 @@
 function Attributes() {
   return (
-    <div>
+    <div className="container character-info__attributes">
       <h3>Attributes</h3>
     </div>
   );
