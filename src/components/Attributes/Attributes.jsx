@@ -18,7 +18,7 @@ function Attributes({ character, character_modifiers, updateCharacter }) {
         {Object.entries(character)
           .filter(([k, _]) => k !== "id")
           .map(([attribute, points]) => (
-            <li>
+            <li key={attribute}>
               {attribute}:{points} (Modifier: {character_modifiers[attribute]})
               <ModifierControls
                 onIncrement={() => increaseAttribute(attribute)}

@@ -57,7 +57,10 @@ function CharacterSheet({
             onClick={closeClassRequirements}
           />
         )}
-        <Skills />
+        <Skills
+          character={character}
+          character_modifiers={characterModifiers}
+        />
       </div>
     </div>
   );
