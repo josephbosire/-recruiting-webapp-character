@@ -17,6 +17,7 @@ function App() {
     setCharacters((prev) => [
       ...prev,
       {
+        id: new Date().getTime(), // Temporary way to quickly get a unique id. Not safe for production
         Strength: DEFAULT_ATTRIBUTE_POINTS,
         Dexeterity: DEFAULT_ATTRIBUTE_POINTS,
         Constitution: DEFAULT_ATTRIBUTE_POINTS,
@@ -25,6 +26,14 @@ function App() {
         Charisma: DEFAULT_ATTRIBUTE_POINTS,
       },
     ]);
+  };
+
+  const handleUpdateCharacterList = (updatedCharacter) => {
+    setCharacters((prev) =>
+      prev.map((char) =>
+        char.id === updatedCharacter.id ? updatedCharacter : char,
+      ),
+    );
   };
 
   const handleResetCharacters = () => {
@@ -50,6 +59,7 @@ function App() {
             key={`character-${idx}`}
             sheet_number={idx + 1}
             character={character}
+            handleUpdateCharacterList={handleUpdateCharacterList}
           />
         ))}
       </section>

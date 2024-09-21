@@ -1,8 +1,8 @@
-function ModifierControls() {
+function ModifierControls({ onIncrement, onDecrement }) {
   return (
     <>
-      <button>+</button>
-      <button>-</button>
+      <button onClick={onIncrement}>+</button>
+      <button onClick={onDecrement}>-</button>
     </>
   );
 }
