@@ -5,7 +5,7 @@ import Skills from "../Skills/Skills";
 import { useState } from "react";
 import ClassRequirement from "../Classes/ClassRequirement";
 
-function CharacterSheet() {
+function CharacterSheet({ sheet_number, character }) {
   const [showClass, setShowClass] = useState(false);
   const [selectedClass, setSelectedClass] = useState(null);
 
@@ -20,10 +20,10 @@ function CharacterSheet() {
   };
   return (
     <div className="container">
-      <h3>Character: 1</h3>
+      <h3>Character: {sheet_number}</h3>
       <SkillCheck />
       <div className="character-info">
-        <Attributes />
+        <Attributes character={character} />
         <Classes onClickClass={handOnClickClass} />
         {showClass && (
           <ClassRequirement

@@ -1,8 +1,8 @@
-function ActionButtons() {
+function ActionButtons({ onAddCharacter, onResetCharacters }) {
   return (
     <div>
-      <button>Add New Character</button>
-      <button>Reset All Characters</button>
+      <button onClick={() => onAddCharacter()}>Add New Character</button>
+      <button onClick={() => onResetCharacters()}>Reset All Characters</button>
       <button>Save All Characters</button>
     </div>
   );
