@@ -24,7 +24,7 @@ function CharacterSheet({ sheet_number, character }) {
       <SkillCheck />
       <div className="character-info">
         <Attributes character={character} />
-        <Classes onClickClass={handOnClickClass} />
+        <Classes character={character} onClick={handOnClickClass} />
         {showClass && (
           <ClassRequirement
             name={selectedClass}

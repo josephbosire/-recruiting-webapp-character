@@ -12,7 +12,7 @@ const CharactersContextProvider = ({ children }) => {
       {
         id: new Date().getTime(), // Temporary way to quickly get a unique id. Not safe for production
         Strength: DEFAULT_ATTRIBUTE_POINTS,
-        Dexeterity: DEFAULT_ATTRIBUTE_POINTS,
+        Dexterity: DEFAULT_ATTRIBUTE_POINTS,
         Constitution: DEFAULT_ATTRIBUTE_POINTS,
         Intelligence: DEFAULT_ATTRIBUTE_POINTS,
         Wisdom: DEFAULT_ATTRIBUTE_POINTS,
