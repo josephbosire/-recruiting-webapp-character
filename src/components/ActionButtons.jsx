@@ -1,8 +1,11 @@
-function ActionButtons({ onAddCharacter, onResetCharacters }) {
+import { useCharactersContext } from "../contexts/CharacterContextProvider";
+
+function ActionButtons() {
+  const { addCharacter, resetCharacters } = useCharactersContext();
   return (
     <div>
-      <button onClick={() => onAddCharacter()}>Add New Character</button>
-      <button onClick={() => onResetCharacters()}>Reset All Characters</button>
+      <button onClick={() => addCharacter()}>Add New Character</button>
+      <button onClick={() => resetCharacters()}>Reset All Characters</button>
       <button>Save All Characters</button>
     </div>
   );

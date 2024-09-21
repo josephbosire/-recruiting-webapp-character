@@ -1,37 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { AVAILABLE_SKILL_POINTS, SKILL_LIST } from "../../consts";
+import {
+  useCalcualteAvailableSkillPoints,
+  useCharacterModifiers,
+  useSkills,
+} from "../../lib/hooks";
 import ModifierControls from "../ModifierControls";
 
-function Skills({ character, character_modifiers }) {
-  const [availablePoints, setAvailablePoints] = useState(
-    AVAILABLE_SKILL_POINTS,
-  );
-
-  const [skills, setSkills] = useState(() =>
-    SKILL_LIST.map((skill) => ({ ...skill, points: 0 })),
-  );
-
-  const incrementSkill = (name) => {
-    setSkills((prev) =>
-      prev.map((skill) =>
-        skill.name === name ? { ...skill, points: ++skill.points } : skill,
-      ),
-    );
-  };
-
-  const decrementSkill = (name) => {
-    setSkills((prev) =>
-      prev.map((skill) =>
-        skill.name === name ? { ...skill, points: --skill.points } : skill,
-      ),
-    );
-  };
-
-  useEffect(() => {
-    const intelligence_modifier = character_modifiers.Intelligence || 0;
-    const newSkillPoints = AVAILABLE_SKILL_POINTS + 4 * intelligence_modifier;
-    setAvailablePoints(newSkillPoints);
-  }, [character_modifiers]);
+function Skills({ character }) {
+  const character_modifiers = useCharacterModifiers(character);
+  const availablePoints = useCalcualteAvailableSkillPoints(character_modifiers);
+  const { skills, totalCurrentSkillPoints, incrementSkill, decrementSkill } =
+    useSkills();
   return (
     <div className="container character-info__skills">
       <h3>Skills</h3>
@@ -44,13 +22,20 @@ function Skills({ character, character_modifiers }) {
             character_modifiers={character_modifiers}
             incrementSkill={incrementSkill}
             decrementSkill={decrementSkill}
+            disableIncrement={totalCurrentSkillPoints >= availablePoints}
           />
         ))}
       </ul>
     </div>
   );
 }
-function Skill({ skill, character_modifiers, incrementSkill, decrementSkill }) {
+function Skill({
+  skill,
+  character_modifiers,
+  incrementSkill,
+  decrementSkill,
+  disableIncrement,
+}) {
   return (
     <li>
       <span>
@@ -61,6 +46,7 @@ function Skill({ skill, character_modifiers, incrementSkill, decrementSkill }) {
         {character_modifiers[skill.attributeModifier]}
       </span>
       <ModifierControls
+        disableIncrement={disableIncrement}
         onIncrement={() => incrementSkill(skill.name)}
         onDecrement={() => decrementSkill(skill.name)}
       />

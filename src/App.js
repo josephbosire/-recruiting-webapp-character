@@ -3,43 +3,10 @@ import "./App.css";
 import ActionButtons from "./components/ActionButtons";
 import CharacterSheet from "./components/Character/CharacterSheet";
 import SkillCheckResults from "./components/SkillCheckResults/SkillCheckResults";
-import {
-  ATTRIBUTE_LIST,
-  CLASS_LIST,
-  DEFAULT_ATTRIBUTE_POINTS,
-  SKILL_LIST,
-} from "./consts.js";
+import { useCharactersContext } from "./contexts/CharacterContextProvider";
 
 function App() {
-  const [characters, setCharacters] = useState([]);
-
-  const handleAddCharacter = () => {
-    setCharacters((prev) => [
-      ...prev,
-      {
-        id: new Date().getTime(), // Temporary way to quickly get a unique id. Not safe for production
-        Strength: DEFAULT_ATTRIBUTE_POINTS,
-        Dexeterity: DEFAULT_ATTRIBUTE_POINTS,
-        Constitution: DEFAULT_ATTRIBUTE_POINTS,
-        Intelligence: DEFAULT_ATTRIBUTE_POINTS,
-        Wisdom: DEFAULT_ATTRIBUTE_POINTS,
-        Charisma: DEFAULT_ATTRIBUTE_POINTS,
-      },
-    ]);
-  };
-
-  const handleUpdateCharacterList = (updatedCharacter) => {
-    setCharacters((prev) =>
-      prev.map((char) =>
-        char.id === updatedCharacter.id ? updatedCharacter : char,
-      ),
-    );
-  };
-
-  const handleResetCharacters = () => {
-    setCharacters([]);
-  };
-
+  const { characters } = useCharactersContext();
   return (
     <div className="App">
       <header className="App-header">
@@ -47,10 +14,7 @@ function App() {
       </header>
       <section className="App-section">
         {/* Add Action Buttons Component Here */}
-        <ActionButtons
-          onAddCharacter={handleAddCharacter}
-          onResetCharacters={handleResetCharacters}
-        />
+        <ActionButtons />
         {/* Add Skill Check Results Component Here */}
         <SkillCheckResults />
         {/* Add Character Sheet Component Here */}
@@ -59,7 +23,6 @@ function App() {
             key={`character-${idx}`}
             sheet_number={idx + 1}
             character={character}
-            handleUpdateCharacterList={handleUpdateCharacterList}
           />
         ))}
       </section>
