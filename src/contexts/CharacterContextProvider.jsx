@@ -1,5 +1,9 @@
 import { createContext, useContext, useState } from "react";
-import { DEFAULT_ATTRIBUTE_POINTS } from "../consts";
+import {
+  ATTRIBUTE_LIST,
+  DEFAULT_ATTRIBUTE_POINTS,
+  MAX_CHARACTER_ATTRIBUTE_POINTS,
+} from "../consts";
 
 const CharactersContext = createContext(null);
 
@@ -32,8 +36,27 @@ const CharactersContextProvider = ({ children }) => {
   const resetCharacters = () => {
     setCharacters([]);
   };
+  const getTotalCharacterAttrPoints = (id) => {
+    const character = characters.find((char) => char.id === id);
+    if (!character) {
+      alert("No character with Id found");
+      return;
+    }
 
+    const totalAttributePoints = ATTRIBUTE_LIST.reduce((acc, attr) => {
+      acc += character[attr];
+      return acc;
+    }, 0);
+    return totalAttributePoints;
+  };
   const increaseCharacterAttribute = (character_id, attribute) => {
+    if (
+      getTotalCharacterAttrPoints(character_id) >=
+      MAX_CHARACTER_ATTRIBUTE_POINTS
+    ) {
+      alert("A character can have up to 70 Delegated Attribute Points");
+      return;
+    }
     setCharacters((prev) =>
       prev.map((char) =>
         char.id === character_id

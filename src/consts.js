@@ -58,4 +58,5 @@ export const SKILL_LIST = [
 export const AVAILABLE_SKILL_POINTS = 10;
 
 export const DEFAULT_ATTRIBUTE_POINTS = 10;
+export const MAX_CHARACTER_ATTRIBUTE_POINTS = 70;
 
