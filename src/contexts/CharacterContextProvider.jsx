@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import {
   ATTRIBUTE_LIST,
   DEFAULT_ATTRIBUTE_POINTS,
@@ -7,12 +7,57 @@ import {
 } from "../consts";
 import { getCharacterModifiers, getRandomInt } from "../lib/utils";
 
+const API_URL =
+  "https://recruiting.verylongdomaintotestwith.ca/api/{josephbosire}/character";
 const CharactersContext = createContext(null);
 
 const CharactersContextProvider = ({ children }) => {
   const [characters, setCharacters] = useState({});
   const [skillCheckResults, setSkillCheckResults] = useState([]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(API_URL, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        });
+        if (!response.ok) {
+          throw new Error(`Response status: ${response.status}`);
+        }
+        const json = await response.json();
+        if (json.body) {
+          setCharacters(json.body);
+        }
+      } catch (error) {
+        console.log("An Error occured fetching from the server", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const saveAllCharacters = async () => {
+    try {
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(characters),
+      });
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      }
+      const json = await response.json();
+      console.log("Response:", json);
+    } catch (error) {
+      console.log("An Error occured fetching from the server", error);
+    }
+  };
   const addCharacter = () => {
     const newId = new Date().getTime();
     setCharacters((prev) => ({
@@ -120,6 +165,7 @@ const CharactersContextProvider = ({ children }) => {
         decrementSkill,
         rollDice,
         skillCheckResults,
+        saveAllCharacters,
       }}
     >
       {children}
