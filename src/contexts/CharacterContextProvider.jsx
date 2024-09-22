@@ -3,43 +3,41 @@ import {
   ATTRIBUTE_LIST,
   DEFAULT_ATTRIBUTE_POINTS,
   MAX_CHARACTER_ATTRIBUTE_POINTS,
+  SKILL_LIST,
 } from "../consts";
+import { getCharacterModifiers, getRandomInt } from "../lib/utils";
 
 const CharactersContext = createContext(null);
 
 const CharactersContextProvider = ({ children }) => {
-  const [characters, setCharacters] = useState([]);
+  const [characters, setCharacters] = useState({});
+  const [skillCheckResults, setSkillCheckResults] = useState([]);
 
   const addCharacter = () => {
-    setCharacters((prev) => [
+    const newId = new Date().getTime();
+    setCharacters((prev) => ({
       ...prev,
-      {
-        id: new Date().getTime(), // Temporary way to quickly get a unique id. Not safe for production
+      [newId]: {
+        id: newId, // Temporary way to quickly get a unique id. Not safe for production
         Strength: DEFAULT_ATTRIBUTE_POINTS,
         Dexterity: DEFAULT_ATTRIBUTE_POINTS,
         Constitution: DEFAULT_ATTRIBUTE_POINTS,
         Intelligence: DEFAULT_ATTRIBUTE_POINTS,
         Wisdom: DEFAULT_ATTRIBUTE_POINTS,
         Charisma: DEFAULT_ATTRIBUTE_POINTS,
+        skills: SKILL_LIST.map((skill) => ({ ...skill, points: 0 })),
       },
-    ]);
-  };
-
-  const updateCharacters = (updatedCharacter) => {
-    setCharacters((prev) =>
-      prev.map((char) =>
-        char.id === updatedCharacter.id ? updatedCharacter : char,
-      ),
-    );
+    }));
   };
 
   const resetCharacters = () => {
-    setCharacters([]);
+    setCharacters({});
+    setSkillCheckResults([]);
   };
   const getTotalCharacterAttrPoints = (id) => {
-    const character = characters.find((char) => char.id === id);
+    const character = characters[id];
     if (!character) {
-      alert("No character with Id found");
+      alert(`No character with Id: ${id} found`);
       return;
     }
 
@@ -49,30 +47,64 @@ const CharactersContextProvider = ({ children }) => {
     }, 0);
     return totalAttributePoints;
   };
-  const increaseCharacterAttribute = (character_id, attribute) => {
-    if (
-      getTotalCharacterAttrPoints(character_id) >=
-      MAX_CHARACTER_ATTRIBUTE_POINTS
-    ) {
+  const increaseCharacterAttribute = (id, attribute) => {
+    if (getTotalCharacterAttrPoints(id) >= MAX_CHARACTER_ATTRIBUTE_POINTS) {
       alert("A character can have up to 70 Delegated Attribute Points");
       return;
     }
-    setCharacters((prev) =>
-      prev.map((char) =>
-        char.id === character_id
-          ? { ...char, [attribute]: ++char[attribute] }
-          : char,
-      ),
-    );
+    const chr = characters[id];
+    const updatedChar = { ...chr, [attribute]: ++chr[attribute] };
+    setCharacters((prev) => ({ ...prev, [id]: updatedChar }));
   };
-  const decreaseCharacterAttribute = (character_id, attribute) => {
-    setCharacters((prev) =>
-      prev.map((char) =>
-        char.id === character_id
-          ? { ...char, [attribute]: --char[attribute] }
-          : char,
-      ),
+  const decreaseCharacterAttribute = (id, attribute) => {
+    const chr = characters[id];
+    const updatedChar = { ...chr, [attribute]: ++chr[attribute] };
+    setCharacters((prev) => ({ ...prev, [id]: updatedChar }));
+  };
+
+  const getCharacterCurrentSkillPoints = (id) => {
+    const totalCurrentSkillPoints = characters[id].skills.reduce(
+      (acc, skill) => (acc += skill.points),
+      0,
     );
+    return totalCurrentSkillPoints;
+  };
+  const incrementSkill = (id, name) => {
+    const chr = { ...characters[id] };
+    chr.skills = chr.skills.map((skill) =>
+      skill.name === name ? { ...skill, points: ++skill.points } : skill,
+    );
+    setCharacters((prev) => ({ ...prev, [id]: chr }));
+  };
+
+  const decrementSkill = (id, name) => {
+    const chr = { ...characters[id] };
+    chr.skills = chr.skills.map((skill) =>
+      skill.name === name ? { ...skill, points: --skill.points } : skill,
+    );
+    setCharacters((prev) => ({ ...prev, [id]: chr }));
+  };
+
+  const rollDice = (id, selectedSkill, dc) => {
+    const rand = getRandomInt(1, 20);
+    const skill = characters[id].skills.find(
+      (skill) => skill.name === selectedSkill,
+    );
+    const modifiers = getCharacterModifiers(characters[id]);
+    const skillModifierValue = modifiers[skill.attributeModifier];
+    const total = skill.points + rand + skillModifierValue;
+    const newResult = {
+      character_id: id,
+      roll: rand,
+      dc: dc,
+      total: total,
+      selectedSkill,
+      selectedSkillPoints: skill.points,
+    };
+    setSkillCheckResults((prev) => [
+      ...prev.filter((result) => result.character_id !== id),
+      newResult,
+    ]);
   };
 
   return (
@@ -80,10 +112,14 @@ const CharactersContextProvider = ({ children }) => {
       value={{
         characters,
         addCharacter,
-        updateCharacters,
         resetCharacters,
         increaseCharacterAttribute,
         decreaseCharacterAttribute,
+        getCharacterCurrentSkillPoints,
+        incrementSkill,
+        decrementSkill,
+        rollDice,
+        skillCheckResults,
       }}
     >
       {children}

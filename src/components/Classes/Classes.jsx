@@ -2,7 +2,6 @@ import { CLASS_LIST } from "../../consts";
 import { hasClassAttributes } from "../../lib/utils";
 
 function Classes({ character, onClick }) {
-  console.log("Rerendered");
   return (
     <div className="container character-info__classes">
       <h3>Classes</h3>

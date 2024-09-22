@@ -21,7 +21,7 @@ function CharacterSheet({ sheet_number, character }) {
   return (
     <div className="container">
       <h3>Character: {sheet_number}</h3>
-      <SkillCheck />
+      <SkillCheck character={character} />
       <div className="character-info">
         <Attributes character={character} />
         <Classes character={character} onClick={handOnClickClass} />

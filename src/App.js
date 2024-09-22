@@ -18,10 +18,10 @@ function App() {
         {/* Add Skill Check Results Component Here */}
         <SkillCheckResults />
         {/* Add Character Sheet Component Here */}
-        {characters.map((character, idx) => (
+        {Object.entries(characters).map(([id, character]) => (
           <CharacterSheet
-            key={`character-${idx}`}
-            sheet_number={idx + 1}
+            key={`character-${id}`}
+            sheet_number={id}
             character={character}
           />
         ))}
