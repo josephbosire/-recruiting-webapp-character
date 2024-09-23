@@ -94,7 +94,6 @@ const CharactersContextProvider = ({ children }) => {
   };
   const increaseCharacterAttribute = (id, attribute) => {
     if (getTotalCharacterAttrPoints(id) >= MAX_CHARACTER_ATTRIBUTE_POINTS) {
-      alert("A character can have up to 70 Delegated Attribute Points");
       return;
     }
     const chr = characters[id];
@@ -103,7 +102,7 @@ const CharactersContextProvider = ({ children }) => {
   };
   const decreaseCharacterAttribute = (id, attribute) => {
     const chr = characters[id];
-    const updatedChar = { ...chr, [attribute]: ++chr[attribute] };
+    const updatedChar = { ...chr, [attribute]: --chr[attribute] };
     setCharacters((prev) => ({ ...prev, [id]: updatedChar }));
   };
 
@@ -144,7 +143,7 @@ const CharactersContextProvider = ({ children }) => {
       dc: dc,
       total: total,
       selectedSkill,
-      selectedSkillPoints: skill.points,
+      skillTotal: skill.points + skillModifierValue,
     };
     setSkillCheckResults((prev) => [
       ...prev.filter((result) => result.character_id !== id),
@@ -166,6 +165,7 @@ const CharactersContextProvider = ({ children }) => {
         rollDice,
         skillCheckResults,
         saveAllCharacters,
+        getTotalCharacterAttrPoints,
       }}
     >
       {children}
